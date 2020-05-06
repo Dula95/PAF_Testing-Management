@@ -25,7 +25,6 @@ public class Testing {
 		return con;
 	}
 
-
 	public String readTesting() {
 		String output = "";
 		try {
@@ -47,26 +46,21 @@ public class Testing {
 				String tTime = rs.getString("tTime");
 
 				// Add into the html table
-				
-				output += "<tr><td><input id='hidtestIDUpdate'"
-						+ "       name='hidtestIDUpdate' type='hidden'  "
+
+				output += "<tr><td><input id='hidtestIDUpdate'" + "       name='hidtestIDUpdate' type='hidden'  "
 						+ "      value='" + testId + "'>" + testId + "</td>";
-				
-				
+
 				output += "<td>" + testName + "</td>";
 				output += "<td>" + tDescription + "</td>";
 				output += "<td>" + tDate + "</td>";
 				output += "<td>" + tTime + "</td>";
 				// buttons
-			
-				output += "<td><input name='btnUpdate'"
-						+ " type='button'" + "value='Update'  "
+
+				output += "<td><input name='btnUpdate'" + " type='button'" + "value='Update'  "
 						+ "         class='btnUpdate btn btn-secondary'></td>"
-						+ "      <td><input name='btnRemove' type='button'      "
-						+ " value='Remove'      "
-						+ "     class='btnRemove btn btn-danger' data-testId='" 
-						+ testId + "'>" + "</td></tr>"; 
-				// buttons 
+						+ "      <td><input name='btnRemove' type='button'      " + " value='Remove'      "
+						+ "     class='btnRemove btn btn-danger' data-testId='" + testId + "'>" + "</td></tr>";
+				// buttons
 			}
 			con.close();
 			// Complete the html table
@@ -106,7 +100,7 @@ public class Testing {
 		}
 		return output;
 	}
-	
+
 	public String updateTesting(String testId, String testName, String tDescription, String tDate, String tTime) {
 		String output = "";
 		try {
@@ -118,7 +112,7 @@ public class Testing {
 			String query = "UPDATE testing SET testName=?, tDescription=?, tDate=?,tTime=? WHERE testId=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			// binding values
-			
+
 			preparedStmt.setString(1, testName);
 			preparedStmt.setString(2, tDescription);
 			preparedStmt.setString(3, tDate);
@@ -135,7 +129,7 @@ public class Testing {
 		return output;
 	}
 
-	/*public String deleteTesting(String testId) {
+	public String deleteTesting(String testId) {
 
 		String output = "";
 
@@ -144,66 +138,28 @@ public class Testing {
 			if (con == null) {
 				return "Error while connecting to the database for deleting.";
 			}
-             System.out.println("test2");
+
 			// create a prepared statement
 			String query = "delete from testing where testId=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
+
 			// binding values
 			preparedStmt.setInt(1, Integer.parseInt(testId));
+
 			// execute the statement
 			preparedStmt.execute();
 			con.close();
 
-			output = "Deleted successfully";
+			String newTestings = readTesting();
+			output = "{\"status\":\"success\", \"data\": \"" + newTestings + "\"}";
+
+			// output = "Deleted successfully";
 			System.out.println("Deleted successfully");
 
 		} catch (Exception e) {
-			output = "Error while deleting the testing.";
+
+			output = "{\"status\":\"error\", \"data\":      " + "   \"Error while deleting the testing.\"}";
 			System.err.println(e.getMessage());
-		}
-		return output;
-	}*/
-public String deleteTesting(String testId) {
-		
-		String output = "";
-		
-		try {
-			Connection con = connect();
-			if (con == null) {
-				return "Error while connecting to the database for deleting.";
-			}
-			
-			// create a prepared statement
-			String query ="delete from testing where testId=?";
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			
-			// binding values
-			preparedStmt.setInt(1, Integer.parseInt(testId));
-			
-		
-			
-			// execute the statement
-			preparedStmt.execute();
-			con.close();
-			
-			
-			
-			String newTestings = readTesting();  
-			output = "{\"status\":\"success\", \"data\": \"" +    
-			newTestings + "\"}"; 
-			
-			
-			//output = "Deleted successfully";
-			System.out.println("Deleted successfully");
-			
-			
-			
-			
-		} catch (Exception e) {
-			
-			output = "{\"status\":\"error\", \"data\":      "
-					+ "   \"Error while deleting the testing.\"}";  
-			System.err.println(e.getMessage()); 
 		}
 		return output;
 	}
